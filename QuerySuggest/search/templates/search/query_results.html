@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search Results</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <style>
+      .highlight {
+        background-color: yellow;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Results for "{{ query }}"</h1>
+
+      <div>
+        <span>
+          <u>Also Search for</u> : 
+          {% for city in random_citys %}
+            <a href="?q={{ city.name }}">{{ city.name }}</a>
+            {% if not forloop.last %}, {% endif %}
+          {% endfor %}
+        </span>
+      </div>
+
+      {% if results %}
+      <ul>
+        {% for result in results %}
+        <li>
+          <strong>{{ result.title }}</strong><br />
+          <p class="result-content">{{ result.content }}</p> <!-- Added class for JavaScript to target -->
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="no-results">No results found for "{{ query }}".</p>
+      {% endif %}
+
+      <h3>Additional Information:</h3>
+
+      {% if nltk_info %}
+      <h4>Synonyms:</h4>
+      <ul>
+        {% for synonym in nltk_info.synonyms %}
+        <li>{{ synonym }}</li>
+        {% endfor %}
+      </ul>
+
+      <h4>Definitions:</h4>
+      <ul>
+        {% for definition in nltk_info.definitions %}
+        <li>{{ definition }}</li>
+        {% endfor %}
+      </ul>
+
+      <h4>Related Words:</h4>
+      <ul>
+        {% for related_word in nltk_info.related_words %}
+        <li>{{ related_word }}</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p>No additional information available.</p>
+      {% endif %}
+
+      <a href="{% url 'search_page' %}">Back to Search</a>
+    </div>
+
+    <script>
+      // Highlight the query term in the content
+      document.addEventListener('DOMContentLoaded', function () {
+          const query = "{{ query|escapejs }}";
+          const results = document.querySelectorAll('.result-content');
+          
+          results.forEach(function (result) {
+              if (query) {
+                  const regex = new RegExp(`(${query})`, 'gi');
+                  result.innerHTML = result.innerHTML.replace(regex, '<span class="highlight">$1</span>'); // Wrap query term in span with highlight class
+              }
+          });
+      });
+    </script>
+  </body>
+</html>

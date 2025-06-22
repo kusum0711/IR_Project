@@ -1,0 +1,14 @@
+
+elasticsearch*/
+
+# Common excludes
+*.log
+*.tar.gz
+*.zip
+*.deb
+*.rpm
+__pycache__/
+*.pyc
+db.sqlite3
+.env
+venv/
