@@ -84,9 +84,8 @@ Follow the steps below to set up and run the project from scratch:
 ## Directory Structure
 
 ```
-QuerySuggest/
-|
-|-- data/               # Folder containing text files for city names
+|data              # Folder containing text files for city names
+|QuerySuggest/
 |-- search/             # Django app for the search functionality
 |   |-- templates/      # HTML templates for the app
 |   |-- models.py       # City model definition
